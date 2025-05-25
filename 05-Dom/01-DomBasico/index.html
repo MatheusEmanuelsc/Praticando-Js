@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DOM - Obter e Adicionar Conteúdo</title>
+</head>
+
+<body>
+
+    <h2>Manipulação DOM</h2>
+
+    <!-- Campo de entrada de texto -->
+    <input type="text" id="meuInput" placeholder="Digite algo..." />
+
+    <!-- Botão para acionar a função -->
+    <button onclick="manipularDOM()">Executar</button>
+
+    <!-- Área onde vamos exibir e adicionar conteúdos -->
+    <div id="meuDiv">Conteúdo inicial</div>
+
+    <hr>
+
+    <!-- SCRIPT com exemplos e explicações -->
+    <script>
+        function manipularDOM() {
+            // Obtemos a referência do input
+            const input = document.getElementById("meuInput");
+
+            // Obtemos o valor digitado
+            const valor = input.value;
+            console.log("Valor do input:", valor);
+
+            // Pegamos a referência da div onde vamos mostrar informações
+            const div = document.getElementById("meuDiv");
+
+            // innerHTML: substitui TODO o conteúdo HTML interno
+            div.innerHTML = `<p><strong>Você digitou:</strong> ${valor}</p>`;
+
+            // Adicionando mais conteúdo HTML SEM substituir (+=)
+            div.innerHTML += "<p>Esse conteúdo foi adicionado com innerHTML +=</p>";
+
+            // Adicionando texto simples sem interpretar HTML
+            div.textContent += " [Texto simples adicionado com textContent]";
+
+            // ------------------------------
+            // Criando elementos dinamicamente
+            // ------------------------------
+
+            // Criando um novo parágrafo com JavaScript
+            const novoParagrafo = document.createElement("p"); // <p></p>
+
+            // Definindo o texto do parágrafo
+            novoParagrafo.textContent = "Elemento criado dinamicamente com createElement";
+
+            // Podemos também adicionar classe, id, estilos, etc
+            novoParagrafo.className = "destaque"; // adiciona class="destaque"
+
+            // Adiciona o elemento no final da div
+            div.appendChild(novoParagrafo);
+        }
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+<!-- ## 🧠 RESUMO DOS MÉTODOS USADOS
+
+| Método / Propriedade       | O que faz                                         |
+| -------------------------- | ------------------------------------------------- |
+| `input.value`              | Retorna o valor digitado pelo usuário             |
+| `element.innerHTML`        | Substitui ou lê o conteúdo HTML de um elemento    |
+| `element.innerHTML +=`     | Adiciona HTML sem apagar o conteúdo atual         |
+| `element.textContent`      | Substitui ou lê apenas o texto (sem tags HTML)    |
+| `element.textContent +=`   | Adiciona texto simples sem apagar o anterior      |
+| `document.createElement()` | Cria um novo elemento HTML no JavaScript          |
+| `element.appendChild()`    | Adiciona um novo nó (elemento) dentro de outro    |
+| `element.className`        | Define uma classe CSS ao elemento (`class="..."`) |
+
+--- -->
+
+S
