@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Completo: Seleção de Elementos no DOM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .index {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .index h2 {
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .index-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            list-style: none;
+        }
+
+        .index-list li {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .index-list li:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .index-list a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #3498db;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-block::before {
+            content: "JavaScript";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+        }
+
+        .html-block {
+            background: #34495e;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .html-block::before {
+            content: "HTML";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #e67e22;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+        }
+
+        .comment {
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        .demo-area {
+            background: #f8f9fa;
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4);
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .tip {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #5f27cd;
+        }
+
+        .tip strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .method-name {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .return-type {
+            color: #27ae60;
+            font-style: italic;
+        }
+
+        .example-elements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .example-element {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .example-element:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.4);
+        }
+
+        .selected {
+            background: linear-gradient(135deg, #fd79a8, #e84393) !important;
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(232, 67, 147, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .index-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎯 Guia Completo: Seleção de Elementos no DOM</h1>
+
+        <!-- ÍNDICE -->
+        <div class="index">
+            <h2>📋 Índice do Conteúdo</h2>
+            <ul class="index-list">
+                <li><a href="#introducao">1. Introdução ao DOM</a></li>
+                <li><a href="#getElementById">2. getElementById()</a></li>
+                <li><a href="#getElementsByClassName">3. getElementsByClassName()</a></li>
+                <li><a href="#getElementsByTagName">4. getElementsByTagName()</a></li>
+                <li><a href="#querySelector">5. querySelector()</a></li>
+                <li><a href="#querySelectorAll">6. querySelectorAll()</a></li>
+                <li><a href="#comparacao">7. Comparação dos Métodos</a></li>
+                <li><a href="#exemplos-praticos">8. Exemplos Práticos</a></li>
+                <li><a href="#performance">9. Performance e Boas Práticas</a></li>
+                <li><a href="#conclusao">10. Conclusão</a></li>
+            </ul>
+        </div>
+
+        <!-- SEÇÃO 1: INTRODUÇÃO -->
+        <div class="section" id="introducao">
+            <h2>1. 🌟 Introdução ao DOM</h2>
+            <p>O <span class="highlight">DOM (Document Object Model)</span> é uma representação estruturada do documento
+                HTML em forma de árvore. Para manipular elementos da página, primeiro precisamos selecioná-los.
+                JavaScript oferece vários métodos para isso.</p>
+
+            <div class="html-block">
+                &lt;!-- Exemplo de estrutura HTML --&gt;
+                &lt;div id="container"&gt;
+                &lt;h1 class="titulo"&gt;Meu Site&lt;/h1&gt;
+                &lt;p class="paragrafo"&gt;Este é um parágrafo.&lt;/p&gt;
+                &lt;button class="btn"&gt;Clique aqui&lt;/button&gt;
+                &lt;/div&gt;
+            </div>
+
+            <div class="tip">
+                <strong>💡 Dica:</strong>
+                O DOM é carregado de cima para baixo. Certifique-se de que o elemento existe antes de tentar
+                selecioná-lo!
+            </div>
+        </div>
+
+        <!-- SEÇÃO 2: getElementById -->
+        <div class="section" id="getElementById">
+            <h2>2. 🎯 getElementById()</h2>
+            <p>Seleciona um elemento pelo seu <span class="highlight">ID único</span>. É o método mais rápido e
+                específico.</p>
+
+            <div class="html-block">
+                &lt;div id="meuElemento"&gt;Conteúdo do elemento&lt;/div&gt;
+            </div>
+
+            <div class="code-block">
+                <span class="comment">// Seleciona o elemento com ID "meuElemento"</span>
+                const elemento = document.getElementById('meuElemento');
+
+                <span class="comment">// Verifica se o elemento existe antes de usar</span>
+                if (elemento) {
+                elemento.style.color = 'red';
+                elemento.textContent = 'Texto alterado!';
+                console.log('Elemento encontrado:', elemento);
+                } else {
+                console.log('Elemento não encontrado!');
+                }
+            </div>
+
+            <div class="tip">
+                <strong>⚡ Performance:</strong>
+                getElementById() é o método mais rápido, pois IDs são únicos e indexados pelo navegador.
+            </div>
+        </div>
+
+        <!-- SEÇÃO 3: getElementsByClassName -->
+        <div class="section" id="getElementsByClassName">
+            <h2>3. 📚 getElementsByClassName()</h2>
+            <p>Retorna uma <span class="highlight">HTMLCollection</span> (lista viva) de todos os elementos que possuem
+                a classe especificada.</p>
+
+            <div class="html-block">
+                &lt;div class="destaque"&gt;Primeiro elemento&lt;/div&gt;
+                &lt;p class="destaque"&gt;Segundo elemento&lt;/p&gt;
+                &lt;span class="destaque"&gt;Terceiro elemento&lt;/span&gt;
+            </div>
+
+            <div class="code-block">
+                <span class="comment">// Seleciona TODOS os elementos com classe "destaque"</span>
+                const elementos = document.getElementsByClassName('destaque');
+
+                <span class="comment">// HTMLCollection é uma lista viva - muda automaticamente se o DOM mudar</span>
+                console.log('Quantidade de elementos:', elementos.length);
+
+                <span class="comment">// Iterando sobre os elementos</span>
+                for (let i = 0; i < elementos.length; i++) { elementos[i].style.backgroundColor='yellow' ;
+                    elementos[i].textContent +=' (modificado)' ; } <span class="comment">// Ou usando for...of (mais
+                    moderno)</span>
+                    for (const elemento of elementos) {
+                    elemento.classList.add('nova-classe');
+                    }
+
+                    <span class="comment">// Convertendo para array para usar métodos de array</span>
+                    const arrayElementos = Array.from(elementos);
+                    arrayElementos.forEach((elemento, index) => {
+                    elemento.setAttribute('data-index', index);
+                    });
+            </div>
+
+            <div class="tip">
+                <strong>⚠️ Atenção:</strong>
+                HTMLCollection é uma "live collection" - ela se atualiza automaticamente quando o DOM muda!
+            </div>
+        </div>
+
+        <!-- SEÇÃO 4: getElementsByTagName -->
+        <div class="section" id="getElementsByTagName">
+            <h2>4. 🏷️ getElementsByTagName()</h2>
+            <p>Retorna todos os elementos de uma <span class="highlight">tag específica</span>.</p>
+
+            <div class="html-block">
+                &lt;p&gt;Primeiro parágrafo&lt;/p&gt;
+                &lt;p&gt;Segundo parágrafo&lt;/p&gt;
+                &lt;div&gt;Uma div&lt;/div&gt;
+                &lt;p&gt;Terceiro parágrafo&lt;/p&gt;
+            </div>
+
+            <div class="code-block">
+                <span class="comment">// Seleciona todos os parágrafos</span>
+                const paragrafos = document.getElementsByTagName('p');
+
+                <span class="comment">// Seleciona todas as divs</span>
+                const divs = document.getElementsByTagName('div');
+
+                <span class="comment">// Seleciona TODOS os elementos (*)</span>
+                const todosElementos = document.getElementsByTagName('*');
+
+                <span class="comment">// Exemplo prático: destacar todos os parágrafos</span>
+                Array.from(paragrafos).forEach((p, index) => {
+                p.style.border = '2px solid blue';
+                p.style.padding = '10px';
+                p.style.margin = '5px';
+                p.setAttribute('data-paragrafo', index + 1);
+                });
+
+                <span class="comment">// Contar elementos por tipo</span>
+                console.log(`Parágrafos: ${paragrafos.length}`);
+                console.log(`Divs: ${divs.length}`);
+                console.log(`Total de elementos: ${todosElementos.length}`);
+            </div>
+        </div>
+
+        <!-- SEÇÃO 5: querySelector -->
+        <div class="section" id="querySelector">
+            <h2>5. 🎨 querySelector()</h2>
+            <p>Seleciona o <span class="highlight">primeiro elemento</span> que corresponde ao seletor CSS especificado.
+            </p>
+
+            <div class="html-block">
+                &lt;div id="container"&gt;
+                &lt;h1 class="titulo principal"&gt;Título Principal&lt;/h1&gt;
+                &lt;p class="texto destaque"&gt;Texto em destaque&lt;/p&gt;
+                &lt;button data-action="submit"&gt;Enviar&lt;/button&gt;
+                &lt;ul&gt;
+                &lt;li class="item"&gt;Item 1&lt;/li&gt;
+                &lt;li class="item ativo"&gt;Item 2&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;/div&gt;
+            </div>
+
+            <div class="code-block">
+                <span class="comment">// Seletores simples</span>
+                const titulo = document.querySelector('h1'); <span class="comment">// Por tag</span>
+                const container = document.querySelector('#container'); <span class="comment">// Por ID</span>
+                const destaque = document.querySelector('.destaque'); <span class="comment">// Por classe</span>
+
+                <span class="comment">// Seletores complexos</span>
+                const tituloComClasse = document.querySelector('h1.titulo'); <span class="comment">// Tag +
+                    classe</span>
+                const itemAtivo = document.querySelector('.item.ativo'); <span class="comment">// Múltiplas
+                    classes</span>
+                const botaoSubmit = document.querySelector('[data-action="submit"]'); <span class="comment">// Por
+                    atributo</span>
+
+                <span class="comment">// Seletores de descendência</span>
+                const primeiroItem = document.querySelector('#container li'); <span class="comment">//
+                    Descendente</span>
+                const textoNoContainer = document.querySelector('#container > p'); <span class="comment">// Filho
+                    direto</span>
+
+                <span class="comment">// Pseudo-seletores</span>
+                const primeiroLi = document.querySelector('li:first-child'); <span class="comment">// Primeiro
+                    filho</span>
+                const ultimoLi = document.querySelector('li:last-child'); <span class="comment">// Último filho</span>
+                const segundoLi = document.querySelector('li:nth-child(2)'); <span class="comment">// N-ésimo
+                    filho</span>
+
+                <span class="comment">// Aplicando modificações</span>
+                if (titulo) {
+                titulo.style.color = 'purple';
+                titulo.style.textDecoration = 'underline';
+                }
+
+                if (itemAtivo) {
+                itemAtivo.style.fontWeight = 'bold';
+                itemAtivo.style.backgroundColor = 'lightgreen';
+                }
+            </div>
+
+            <div class="tip">
+                <strong>🎯 Flexibilidade:</strong>
+                querySelector aceita qualquer seletor CSS válido, tornando-o extremamente flexível!
+            </div>
+        </div>
+
+        <!-- SEÇÃO 6: querySelectorAll -->
+        <div class="section" id="querySelectorAll">
+            <h2>6. 🎨 querySelectorAll()</h2>
+            <p>Retorna uma <span class="highlight">NodeList</span> (lista estática) de todos os elementos que
+                correspondem ao seletor CSS.</p>
+
+            <div class="html-block">
+                &lt;div class="card"&gt;Card 1&lt;/div&gt;
+                &lt;div class="card destaque"&gt;Card 2&lt;/div&gt;
+                &lt;div class="card"&gt;Card 3&lt;/div&gt;
+                &lt;p class="texto"&gt;Parágrafo 1&lt;/p&gt;
+                &lt;p class="texto"&gt;Parágrafo 2&lt;/p&gt;
+            </div>
+
+            <div class="code-block">
+                <span class="comment">// Seleciona todos os elementos com classe "card"</span>
+                const cards = document.querySelectorAll('.card');
+
+                <span class="comment">// Seleciona todos os parágrafos</span>
+                const textos = document.querySelectorAll('p.texto');
+
+                <span class="comment">// Seletores complexos</span>
+                const todosCards = document.querySelectorAll('div[class*="card"]');
+
+                <span class="comment">// NodeList tem forEach nativo (diferente de HTMLCollection)</span>
+                cards.forEach((card, index) => {
+                card.style.border = '2px solid green';
+                card.style.padding = '15px';
+                card.style.margin = '10px';
+                card.textContent += ` (${index + 1})`;
+
+                <span class="comment">// Adiciona evento de clique</span>
+                card.addEventListener('click', () => {
+                card.classList.toggle('selecionado');
+                });
+                });
+
+                <span class="comment">// Convertendo para array para usar métodos avançados</span>
+                const arrayCards = [...cards]; <span class="comment">// Ou Array.from(cards)</span>
+
+                <span class="comment">// Filtrando elementos</span>
+                const cardsComDestaque = arrayCards.filter(card =>
+                card.classList.contains('destaque')
+                );
+
+                <span class="comment">// Mapeando elementos</span>
+                const textosCards = arrayCards.map(card => card.textContent);
+
+                console.log('Textos dos cards:', textosCards);
+                console.log('Cards com destaque:', cardsComDestaque.length);
+            </div>
+
+            <div class="tip">
+                <strong>📋 NodeList vs HTMLCollection:</strong>
+                NodeList é estática e tem forEach(), enquanto HTMLCollection é dinâmica mas não tem forEach().
+            </div>
+        </div>
+
+        <!-- SEÇÃO 7: COMPARAÇÃO -->
+        <div class="section" id="comparacao">
+            <h2>7. ⚖️ Comparação dos Métodos</h2>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th>Retorna</th>
+                        <th>Performance</th>
+                        <th>Flexibilidade</th>
+                        <th>Quando Usar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="method-name">getElementById()</span></td>
+                        <td><span class="return-type">Element | null</span></td>
+                        <td>🚀 Muito rápida</td>
+                        <td>⭐ Baixa</td>
+                        <td>Elemento único com ID</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name">getElementsByClassName()</span></td>
+                        <td><span class="return-type">HTMLCollection</span></td>
+                        <td>🏃 Rápida</td>
+                        <td>⭐⭐ Média</td>
+                        <td>Múltiplos elementos por classe</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name">getElementsByTagName()</span></td>
+                        <td><span class="return-type">HTMLCollection</span></td>
+                        <td>🏃 Rápida</td>
+                        <td>⭐ Baixa</td>
+                        <td>Todos elementos de uma tag</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name">querySelector()</span></td>
+                        <td><span class="return-type">Element | null</span></td>
+                        <td>🚶 Moderada</td>
+                        <td>⭐⭐⭐⭐⭐ Muito alta</td>
+                        <td>Primeiro elemento com seletor CSS</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-name">querySelectorAll()</span></td>
+                        <td><span class="return-type">NodeList</span></td>
+                        <td>🚶 Moderada</td>
+                        <td>⭐⭐⭐⭐⭐ Muito alta</td>
+                        <td>Múltiplos elementos com seletor CSS</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="code-block">
+                <span class="comment">// Exemplo comparativo de performance</span>
+                console.time('getElementById');
+                const elementoId = document.getElementById('meuId');
+                console.timeEnd('getElementById');
+
+                console.time('querySelector');
+                const elementoQuery = document.querySelector('#meuId');
+                console.timeEnd('querySelector');
+
+                <span class="comment">// getElementById geralmente é mais rápido para IDs</span>
+                <span class="comment">// querySelector é mais flexível para seletores complexos</span>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 8: EXEMPLOS PRÁTICOS -->
+        <div class="section" id="exemplos-praticos">
+            <h2>8. 🛠️ Exemplos Práticos</h2>
+
+            <div class="demo-area">
+                <h3>🎮 Área de Demonstração</h3>
+                <div class="example-elements">
+                    <div class="example-element" id="elemento1">Elemento 1</div>
+                    <div class="example-element" id="elemento2">Elemento 2</div>
+                    <div class="example-element" id="elemento3">Elemento 3</div>
+                    <div class="example-element" id="elemento4">Elemento 4</div>
+                </div>
+
+                <button class="demo-button" onclick="selecionarPorId()">Selecionar por ID</button>
+                <button class="demo-button" onclick="selecionarTodos()">Selecionar Todos</button>
+                <button class="demo-button" onclick="selecionarPares()">Selecionar Pares</button>
+                <button class="demo-button" onclick="resetarSelecao()">Resetar</button>
+            </div>
+
+            <div class="code-block">
+                <span class="comment">// Exemplo 1: Sistema de abas</span>
+                function criarSistemaAbas() {
+                const abas = document.querySelectorAll('.aba');
+                const conteudos = document.querySelectorAll('.conteudo-aba');
+
+                abas.forEach((aba, index) => {
+                aba.addEventListener('click', () => {
+                <span class="comment">// Remove classe ativa de todas as abas</span>
+                abas.forEach(a => a.classList.remove('ativa'));
+                conteudos.forEach(c => c.classList.remove('ativo'));
+
+                <span class="comment">// Adiciona classe ativa na aba clicada</span>
+                aba.classList.add('ativa');
+                conteudos[index].classList.add('ativo');
+                });
+                });
+                }
+
+                <span class="comment">// Exemplo 2: Validação de formulário</span>
+                function validarFormulario() {
+                const inputs = document.querySelectorAll('input[required]');
+                const erros = [];
+
+                inputs.forEach(input => {
+                if (!input.value.trim()) {
+                erros.push(`${input.name} é obrigatório`);
+                input.classList.add('erro');
+                } else {
+                input.classList.remove('erro');
+                }
+                });
+
+                return erros.length === 0;
+                }
+
+                <span class="comment">// Exemplo 3: Filtro de lista</span>
+                function filtrarLista(termo) {
+                const itens = document.querySelectorAll('.item-lista');
+
+                itens.forEach(item => {
+                const texto = item.textContent.toLowerCase();
+                const mostrar = texto.includes(termo.toLowerCase());
+
+                item.style.display = mostrar ? 'block' : 'none';
+                });
+                }
+
+                <span class="comment">// Exemplo 4: Contador de elementos</span>
+                function contarElementos() {
+                const stats = {
+                divs: document.getElementsByTagName('div').length,
+                paragrafos: document.getElementsByTagName('p').length,
+                botoes: document.getElementsByTagName('button').length,
+                imagens: document.getElementsByTagName('img').length,
+                links: document.getElementsByTagName('a').length
+                };
+
+                console.table(stats);
+                return stats;
+                }
+            </div>
+        </div>
+
+        <!-- SEÇÃO 9: PERFORMANCE -->
+        <div class="section" id="performance">
+            <h2>9. ⚡ Performance e Boas Práticas</h2>
+
+            <div class="code-block">
+                <span class="comment">// ❌ RUIM: Buscar o mesmo elemento repetidamente</span>
+                function mauExemplo() {
+                document.getElementById('botao').addEventListener('click', () => {
+                document.getElementById('texto').style.color = 'red';
+                document.getElementById('texto').style.fontSize = '20px';
+                document.getElementById('texto').textContent = 'Clicado!';
+                });
+                }
+
+                <span class="comment">// ✅ BOM: Armazenar referência do elemento</span>
+                function bomExemplo() {
+                const botao = document.getElementById('botao');
+                const texto = document.getElementById('texto');
+
+                botao.addEventListener('click', () => {
+                texto.style.color = 'red';
+                texto.style.fontSize = '20px';
+                texto.textContent = 'Clicado!';
+                });
+                }
+
+                <span class="comment">// ✅ MELHOR: Usar classes CSS para múltiplas alterações</span>
+                function melhorExemplo() {
+                const botao = document.getElementById('botao');
+                const texto = document.getElementById('texto');
+
+                botao.addEventListener('click', () => {
+                texto.classList.add('destaque-clicado');
+                });
+                }
+
+                <span class="comment">// ✅ Cache de elementos frequentemente usados</span>
+                const ElementCache = {
+                header: document.querySelector('header'),
+                nav: document.querySelector('nav'),
+                main: document.querySelector('main'),
+                footer
