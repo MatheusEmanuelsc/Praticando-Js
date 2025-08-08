@@ -4,8 +4,7 @@ Vamos criar uma classe que vai indicar, de acordo com o a altura fornecida pelo 
 qual é o peso ideal, de acordo com a fórmula do IMC (Índice de Massa Corporal).
 O IMC é calculado pela fórmula: IMC = peso / (altura * altura).
 
-IMPORTANTE: O IMC não distingue entre massa magra e massa gorda,
-portanto, é apenas uma referência geral e não deve ser usado como um diagnóstico médico.
+
 ------------------------------------------------------
 Nota: execute o script no terminal com o comando 'node ./script.js'
 */

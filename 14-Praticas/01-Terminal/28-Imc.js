@@ -19,8 +19,7 @@ O IMC é classificado da seguinte forma:
 - Peso ideal: 18.5 <= IMC < 24.9
 - Acima do peso: IMC >= 24.9
 
-IMPORTANTE: O IMC não distingue entre massa magra e massa gorda, 
-portanto, é apenas uma referência geral e não deve ser usado como um diagnóstico médico.
+
 
 ------------------------------------------------------
 Nota: execute o script no terminal com o comando 'node ./script.js'
